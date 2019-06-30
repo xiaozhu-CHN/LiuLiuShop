@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.VerificationMapper">
+	<insert id="insertVerification" parameterType="com.liuliu.com.domain.Verification" >
+		insert into verification (vo_verification, vo_time, email_power, vo_content, user_id) 
+		values (#{voVerification}, #{voTime}, #{emailPower}, #{voContent}, #{userId})
+	</insert>
+	<select id="selectVoVerification" resultMap="resultVerification">
+		select * from verification where email_power = #{emailPower} and user_id = #{userId} order by vo_time desc limit 1 
+	</select>
+	<select id="selectPhoneVoVerification" resultMap="resultVerification">
+		select * from verification where email_power = 2 and vo_content = #{voContent} order by vo_time desc limit 1 
+	</select>
+	<resultMap type="com.liuliu.com.domain.Verification" id="resultVerification">
+        <id property="voId" column="vo_id" javaType="int" />
+		<result property="voVerification" column="vo_verification" javaType="java.lang.String" />
+		<result property="voTime" column="vo_time" javaType="java.sql.Timestamp" />
+		<result property="emailPower" column="email_power" javaType="int" />
+		<result property="voContent" column="vo_content" javaType="java.lang.String" />
+		<result property="userId" column="user_id" javaType="int" />
+    </resultMap>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.IntegralMapper">
+	<insert id="insertUserIntegral" parameterType="com.liuliu.com.domain.Integral">
+		insert into integral (user_id, integral_number, project_id, integral_date) 
+		values (#{userId}, #{integralNumber}, #{projectId}, #{integralDate})
+	</insert>
+	<select id="selectIntegralByUserId" parameterType="int" resultMap="resultIntegralVO">
+        select * from integral
+        left join project
+        on integral.project_id = project.project_id
+        where user_id = #{userId} order by integral.Integral_date desc
+    </select>
+    <resultMap type="com.liuliu.com.domain.Integral" id="resultIntegral">
+		<id property="integralId" column="integral_id" javaType="int" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="integralNumber" column="integral_number" javaType="int" />
+		<result property="projectId" column="project_id" javaType="int" />
+		<result property="integralDate" column="integral_date" javaType="java.sql.Timestamp" />
+	</resultMap>
+	
+	<resultMap type="com.liuliu.com.vo.IntegralVO" id="resultIntegralVO">    
+		<id property="integralId" column="integral_id" javaType="int" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="integralNumber" column="integral_number" javaType="int" />
+		<result property="projectId" column="project_id" javaType="int" />	
+		<result property="integralDate" column="integral_date" javaType="java.sql.Timestamp"/>	
+		<result property="projectName" column="project_name" javaType="java.lang.String" />		
+	</resultMap>
+</mapper>

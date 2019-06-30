@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.AreaMapper">
+	<select id="selectByCityId" parameterType="int" resultMap="resultArea">
+		select * from area where city_id = #{cityId}
+	</select>
+	<insert id="insertArea" >
+		insert into area (area_name, city_id) values (#{areaName}, #{cityId})
+	</insert>
+	<delete id="deleteArea" parameterType="int" >
+	    delete from area where area_id = #{areaId}
+	</delete>
+	<update id="updateArea" parameterType="com.liuliu.com.domain.Area">
+		update area SET area_name = #{areaName} where area_id = #{areaId}
+	</update>
+	<select id="selectProvinceCityAreaVO" parameterType="int" resultMap="resultProvinceCityAreaVO">
+		select area.area_id,area.area_name,city.city_id,city.city_name,province.province_id,province.province_name 
+		from area LEFT JOIN city on area.city_id = city.city_id 
+		LEFT JOIN province on city.province_id = province.province_id
+		where area.area_id = #{areaId}
+	</select>
+    <resultMap type="com.liuliu.com.domain.Area" id="resultArea">
+        <id property="areaId" column="area_id" javaType="int" />
+		<result property="areaName" column="area_name" javaType="java.lang.String" />
+		<result property="cityId" column="city_id" javaType="int" />
+    </resultMap>
+    <resultMap type="com.liuliu.com.vo.ProvinceCityAreaVO" id="resultProvinceCityAreaVO">
+        <id property="areaId" column="area_id" javaType="int" />
+		<result property="areaName" column="area_name" javaType="java.lang.String" />
+		<result property="cityId" column="city_id" javaType="int" />
+		<result property="cityName" column="city_name" javaType="java.lang.String" />
+		<result property="provinceId" column="province_id" javaType="int" />
+		<result property="provinceName" column="province_name" javaType="java.lang.String" />
+    </resultMap>
+</mapper>

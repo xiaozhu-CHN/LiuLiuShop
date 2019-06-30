@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.RabbitInfoMapper">
+	<insert id="insertRabbitInfo" parameterType="com.liuliu.com.domain.RabbitInfo">
+		insert into rabbit_info (o_code, rabbit_info_date) values (#{oCode}, #{rabbitInfoDate})
+	</insert>
+	<select id="selectRabbitInfoList" resultMap="resultRabbitInfo">
+		select * from rabbit_info order by rabbit_info_id desc
+	</select>
+    <resultMap type="com.liuliu.com.domain.Area" id="resultRabbitInfo">
+        <id property="rabbitInfoId" column="rabbit_info_id" javaType="int" />
+		<result property="oCode" column="o_code" javaType="java.lang.String" />
+		<result property="rabbitInfoDate" column="rabbit_info_date" javaType="java.sql.Timestamp" />
+    </resultMap>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ExpressCompanyMapper">
+	<select id="selectAllExpressCompany" resultMap="resultExpressCompany">
+		select * from express_company
+	</select>
+	
+	<insert id="insertExpressCompany" parameterType="String">
+		insert into express_company(express_company_name) values(#{expressCompanyName})
+	</insert>
+	
+	<delete id="deleteExpressCompany" parameterType="com.liuliu.com.domain.Province">
+		delete from express_company where express_company_id = #{expressCompanyId}
+	</delete>
+	
+	<update id="updateExpressCompany" parameterType="com.liuliu.com.domain.ExpressCompany">
+		update express_company SET express_company_name = #{expressCompanyName} where express_company_id = #{expressCompanyId}
+	</update>
+	
+	<resultMap type="com.liuliu.com.domain.ExpressCompany" id="resultExpressCompany">
+		<id property="expressCompanyId" column="express_company_id" javaType="int" />
+		<result property="expressCompanyName" column="express_company_name" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

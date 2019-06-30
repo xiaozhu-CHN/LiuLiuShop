@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProPropertyMapper">
+	<select id="selectFindByProcaId" parameterType="int" resultMap="resultProProperty">
+		select * from pro_property where pro_id = #{proId}
+	</select>
+	<select id="countFindByProprNumbe" resultType="java.lang.Integer">
+		select count(*) from pro_property
+		LEFT JOIN product on pro_property.pro_id = product.pro_id
+		where propr_id = #{proprId} AND propr_number &gt;= #{proprNumber} AND pro_sell = 2
+	</select>
+	<update id="updateProprNumber" >
+		UPDATE pro_property SET propr_number=propr_number-#{proprNumber} WHERE propr_id = #{proprId}
+	</update>
+	<insert id="insertProProperty" parameterType="com.liuliu.com.domain.ProProperty">
+		insert into pro_property (pro_id, propr_name, propr_number, propr_original_price, propr_promote_price, propr_img, propr_cancel_time) 
+		values (#{proId}, #{proprName}, #{proprNumber}, #{proprOriginalPrice}, #{proprPromotePrice}, #{proprImg}, #{proprCancelTime})
+	</insert>	
+	<select id="selectFindByProprId" parameterType="int" resultMap="resultProProperty">
+		select * from pro_property where propr_id = #{proprId}
+	</select>
+	<update id="updateProProperty" parameterType="com.liuliu.com.domain.ProProperty">
+		UPDATE pro_property 
+		<set>
+            <if test="proprName != null">
+                propr_name = #{proprName},
+            </if>
+            <if test="proprNumber != null">
+                propr_number = #{proprNumber},
+            </if>
+            <if test="proprOriginalPrice != null">
+                propr_original_price = #{proprOriginalPrice},
+            </if>
+            <if test="proprPromotePrice != null">
+                propr_promote_price = #{proprPromotePrice},
+            </if>
+            <if test="proprImg != null">
+                propr_img = #{proprImg},
+            </if>
+            <if test="proprCancelTime != null">
+                propr_cancel_time = #{proprCancelTime},
+            </if>
+        </set>
+		WHERE propr_id = #{proprId}
+	</update>
+	<delete id="deleteProProperty" parameterType="int">
+		 delete from pro_property where propr_id = #{proprId}
+	</delete>
+	<update id="updateProprNumberPlus" >
+		UPDATE pro_property SET propr_number=propr_number+#{proprNumber} WHERE propr_id = #{proprId}
+	</update>
+	<resultMap type="com.liuliu.com.domain.ProProperty" id="resultProProperty">
+		<id property="proprId" column="propr_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="proprName" column="propr_name" javaType="java.lang.String" />
+		<result property="proprNumber" column="propr_number" javaType="int" />
+		<result property="proprOriginalPrice" column="propr_original_price" javaType="double" />
+		<result property="proprPromotePrice" column="propr_promote_price" javaType="double" />
+		<result property="proprImg" column="propr_img" javaType="java.lang.String" />
+		<result property="proprCancelTime" column="propr_cancel_time" javaType="int" />
+	</resultMap>
+</mapper>

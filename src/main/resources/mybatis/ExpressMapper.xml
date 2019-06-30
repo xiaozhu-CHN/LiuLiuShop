@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ExpressMapper">
+	<insert id="insertExpress" parameterType="com.liuliu.com.domain.Express">
+		insert into express (oi_id, express_company_id, express_code, express_deliverydate) values (#{oiId}, #{expressCompanyId}, #{expressCode}, #{expressDeliverydate})
+	</insert>
+	<resultMap type="com.liuliu.com.domain.Express" id="resultExpress">
+		<id property="expressId" column="express_id" javaType="int" />
+		<result property="oiId" column="oi_id" javaType="int" />
+		<result property="expressCompanyId" column="express_company_id" javaType="int" />
+		<result property="expressCode" column="express_code" javaType="java.lang.Long" />
+		<result property="expressDeliverydate" column="express_deliverydate" javaType="java.sql.Timestamp" />
+	</resultMap>
+</mapper>

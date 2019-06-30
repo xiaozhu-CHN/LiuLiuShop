@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.EmailMapper">
+	<select id="selectEmail" parameterType="int" resultMap="resultEmail">
+		select * from email where email_power = #{emailPower}
+	</select>
+	<update id="updateEmail" parameterType="com.liuliu.com.domain.Email">
+		update email SET email_host = #{emailHost}, email_port = #{emailPort}, email_username = #{emailUsername}, email_password = #{emailPassword}, email_call = #{emailCall}, email_power = #{emailPower} where email_id = #{emailId}
+	</update>
+	<resultMap type="com.liuliu.com.domain.Email" id="resultEmail">
+		<id property="emailId" column="email_id" javaType="int" />
+		<result property="emailHost" column="email_host" javaType="java.lang.String" />
+		<result property="emailPort" column="email_port" javaType="int" />
+		<result property="emailUsername" column="email_username" javaType="java.lang.String" />
+		<result property="emailPassword" column="email_password" javaType="java.lang.String" />
+		<result property="emailCall" column="email_call" javaType="java.lang.String" />
+		<result property="emailPower" column="email_power" javaType="int" />
+	</resultMap>
+</mapper>

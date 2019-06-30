@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.UserAdressinfoMapper">
+	<select id="selectUserAdressinfoAll" parameterType="int" resultMap="resultAdressinfoVO">
+		select user_adressinfo.*,area.area_name,city.city_id,city.city_name,province.* from user_adressinfo
+		LEFT JOIN area on user_adressinfo.area_id = area.area_id
+		LEFT JOIN city on area.city_id = city.city_id
+		LEFT JOIN province on city.province_id = province.province_id
+		where user_adressinfo.user_id = #{userId}
+	</select>
+	<insert id="insertUserAdressinfo" parameterType="com.liuliu.com.domain.UserAdressinfo">
+        insert into user_adressinfo(usad_phone,usad_name,area_id,usad_adress,user_id,usad_ems)
+        values (#{usadPhone},#{usadName},#{areaId},#{usadAdress},#{userId},#{usadEms})    
+    </insert>
+    <select id="selectUserAdressinfoByuserId" parameterType="int" resultMap="resultAdressinfoVO">
+        select * from user_adressinfo
+		left join area 
+		left join city
+		left join province
+		on city.province_id = province.province_id
+		on area.city_id = city.city_id
+		ON user_adressinfo.area_id=area.area_id
+		where user_adressinfo.user_id=#{userId}
+    </select>
+    
+    <select id="selectUserAdressinfoByusadId" parameterType="int" resultMap="resultUserAdressinfo">
+        select * from user_adressinfo
+        where usad_id=#{usadId}
+    </select>
+    
+    <update id="updateUserAdressinfoByUsadIs" parameterType="com.liuliu.com.domain.UserAdressinfo" >
+        update user_adressinfo
+        set usad_phone = #{usadPhone},
+        usad_name = #{usadName},
+        area_id = #{areaId},
+        usad_adress = #{usadAdress},
+        usad_ems = #{usadEms}
+        where usad_id = #{usadId}
+    </update>
+    
+    <delete id="deleteUserAdressinfoByusadId" parameterType="int">
+      delete from user_adressinfo
+      where usad_id = #{usadId}
+    </delete>
+	<resultMap type="com.liuliu.com.domain.UserAdressinfo" id="resultUserAdressinfo">
+		<id property="usadId" column="usad_id" javaType="int" />
+		<result property="usadPhone" column="usad_phone" javaType="java.lang.Long" />
+		<result property="usadName" column="usad_name" javaType="java.lang.String" />
+		<result property="areaId" column="area_id" javaType="int" />
+		<result property="usadAdress" column="usad_adress" javaType="java.lang.String" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="usadEms" column="usad_ems" javaType="int" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.AdressinfoVO" id="resultAdressinfoVO">
+		<id property="usadId" column="usad_id" javaType="int" />
+		<result property="usadPhone" column="usad_phone" javaType="java.lang.Long" />
+		<result property="usadName" column="usad_name" javaType="java.lang.String" />
+		<result property="areaId" column="area_id" javaType="int" />
+		<result property="usadAdress" column="usad_adress" javaType="java.lang.String" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="usadEms" column="usad_ems" javaType="int" />
+		<result property="areaName" column="area_name" javaType="java.lang.String" />
+		<result property="cityId" column="city_id" javaType="int" />
+		<result property="cityName" column="city_name" javaType="java.lang.String" />
+		<result property="provinceId" column="province_id" javaType="int" />
+		<result property="provinceName" column="province_name" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

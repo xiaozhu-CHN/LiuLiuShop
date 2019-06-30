@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.EmailInfoMapper">
+	<insert id="insertEmailInfo" parameterType="com.liuliu.com.domain.EmailInfo">
+		insert into email_info(email_info_to, email_username, email_info_content, email_info_time) 
+		values(#{emailInfoTo}, #{emailUsername}, #{emailInfoContent}, #{emailInfoTime})
+	</insert>
+	<select id="selectEmailInfoList" resultMap="resultEmailInfo">
+		select * from email_info order by email_info_id desc
+	</select>
+	<resultMap type="com.liuliu.com.domain.EmailInfo" id="resultEmailInfo">
+		<id property="emailInfoId" column="email_info_id" javaType="int" />
+		<result property="emailInfoTo" column="email_info_to" javaType="java.lang.String" />
+		<result property="emailUsername" column="email_username" javaType="java.lang.String" />
+		<result property="emailInfoContent" column="email_info_content" javaType="java.lang.String" />
+		<result property="emailInfoTime" column="email_info_time" javaType="java.sql.Timestamp" />
+	</resultMap>
+</mapper>

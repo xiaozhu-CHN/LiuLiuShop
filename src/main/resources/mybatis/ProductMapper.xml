@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProductMapper">
+	<select id="selectByProId" parameterType="int" resultMap="resultProductCategoryVO">
+		select product.*,pro_category.proca_name,product_store.product_store_call from product LEFT JOIN pro_category on product.proca_id=pro_category.proca_id 
+		LEFT JOIN product_store on product.product_store_id = product_store.product_store_id
+		where product.pro_id = #{proId}
+	</select>
+	<select id="selectByProductStoreId" parameterType="int" resultMap="resultProduct">
+		select * from product where product_store_id = #{productStoreId}
+	</select>
+	<insert id="insertProduct" parameterType="com.liuliu.com.domain.Product" >
+		insert into product (pro_name, pro_subtitle, proca_id, product_store_id, pro_createdate, pro_sell, pro_score) 
+		values (#{proName}, #{proSubtitle}, #{procaId},  #{productStoreId}, #{proCreatedate}, #{proSell}, #{proScore})
+	</insert>
+	<update id="updateProduct" parameterType="com.liuliu.com.domain.Product">
+		update product 
+		 <set>
+            <if test="proName != null">
+                pro_name = #{proName},
+            </if>
+            <if test="proSubtitle != null">
+                pro_subtitle = #{proSubtitle},
+            </if>
+            <if test="procaId != null">
+                proca_id = #{procaId},
+            </if>
+        </set>
+        where pro_id = #{proId}
+	</update>
+	<update id="updateProSell">
+		update product set pro_sell = #{proSell} where pro_id = #{proId}
+	</update>
+	<delete id="deleteProduct" parameterType="int" >
+	    delete from product where pro_id = #{proId}
+	</delete>
+	<select id="selectProIntroduce" parameterType="int" resultType="java.lang.String">
+		select pro_introduce from product where pro_id = #{proId}
+	</select>
+	<update id="updateProIntroduce">
+		update product set pro_introduce = #{proIntroduce} where pro_id = #{proId}
+	</update>
+	<select id="selectProprName" parameterType="java.lang.String" resultMap="resultProductSearchVO">
+		SELECT product.pro_id,pro_property.propr_original_price,pro_property.propr_promote_price,pro_property.propr_img,product.pro_name,product.pro_subtitle,product.pro_score FROM product
+		LEFT JOIN pro_property ON product.pro_id = pro_property.pro_id 
+		WHERE pro_name LIKE CONCAT(CONCAT('%', #{proName}), '%') and pro_sell = 2
+			and pro_property.propr_id in (SELECT min(pro_property.propr_id) FROM product LEFT JOIN pro_property ON product.pro_id = pro_property.pro_id group by pro_property.pro_id)
+	</select>
+	<resultMap type="com.liuliu.com.domain.Product" id="resultProduct">
+		<id property="proId" column="pro_id" javaType="int" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+		<result property="proIntroduce" column="pro_introduce" javaType="java.lang.String" />
+		<result property="proSubtitle" column="pro_subtitle" javaType="java.lang.String" />
+		<result property="procaId" column="proca_id" javaType="int" />
+		<result property="productStoreId" column="product_store_id" javaType="int" />
+		<result property="proCreatedate" column="pro_createdate" javaType="java.sql.Timestamp" />
+		<result property="proSell" column="pro_sell" javaType="int" />
+		<result property="proScore" column="pro_score" javaType="int" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.ProductCategoryVO" id="resultProductCategoryVO">
+		<id property="proId" column="pro_id" javaType="int" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+		<result property="proIntroduce" column="pro_introduce" javaType="java.lang.String" />
+		<result property="proSubtitle" column="pro_subtitle" javaType="java.lang.String" />
+		<result property="procaId" column="proca_id" javaType="int" />
+		<result property="productStoreId" column="product_store_id" javaType="int" />
+		<result property="proCreatedate" column="pro_createdate" javaType="java.sql.Timestamp" />
+		<result property="proSell" column="pro_sell" javaType="int" />
+		<result property="proScore" column="pro_score" javaType="int" />
+		<result property="procaName" column="proca_name" javaType="java.lang.String" />
+		<result property="productStoreCall" column="product_store_call" javaType="java.lang.String" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.ProductSearchVO" id="resultProductSearchVO">
+		<id property="proId" column="pro_id" javaType="int" />
+		<result property="proprOriginalPrice" column="propr_original_price" javaType="double" />
+		<result property="proprPromotePrice" column="propr_promote_price" javaType="double" />
+		<result property="proprImg" column="propr_img" javaType="java.lang.String" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+		<result property="proSubtitle" column="pro_subtitle" javaType="java.lang.String" />
+		<result property="proScore" column="pro_score" javaType="int" />
+	</resultMap>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.SystemAdminMapper">
+	<select id="selectfindByIdPwd" resultMap="resultSystemAdmin">
+		select * from system_admin where sys_admin_name = #{sysAdminName} AND sys_admin_pwd = #{sysAdminPwd}
+	</select>
+	<update id="updateFindByAdminCall" >
+		update system_admin SET sys_admin_call = #{sysAdminCall} where sys_admin_id = #{sysAdminId}
+	</update>
+	<select id="selectfindByName" parameterType="String" resultMap="resultSystemAdmin">
+		select * from system_admin where sys_admin_name = #{sysAdminName}
+	</select>
+	<insert id="insertSystemAdmin" parameterType="com.liuliu.com.domain.SystemAdmin">
+		insert into system_admin (sys_admin_name, auth_id, sys_admin_pwd, sys_admin_call)
+		values (#{sysAdminName}, #{authId}, #{sysAdminPwd}, #{sysAdminCall} )
+	</insert>
+	<update id="updateFindByAdminPwd" >
+		update system_admin SET sys_admin_pwd = #{sysAdminPwd} where sys_admin_id = #{sysAdminId}
+	</update>
+	<resultMap type="com.liuliu.com.domain.SystemAdmin" id="resultSystemAdmin">
+		<id property="sysAdminId" column="sys_admin_id" javaType="int" />
+		<result property="sysAdminName" column="sys_admin_name" javaType="java.lang.String" />
+		<result property="authId" column="auth_id" javaType="int" />
+		<result property="sysAdminPwd" column="sys_admin_pwd" javaType="java.lang.String" />
+		<result property="sysAdminCall" column="sys_admin_call" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProductStoreMapper">
+	<select id="selectfindByIdPwd" resultMap="resultProductStore">
+		select * from product_store where product_store_name = #{productStoreName} AND product_store_pwd = #{productStorePwd}
+	</select>
+	<insert id="insertProductStore" >
+		insert into product_store (product_store_name, product_store_pwd, product_store_examine,product_store_call) values (#{productStoreName}, #{productStorePwd}, 3, #{productStoreCall})
+	</insert>
+	<select id="countProductStoreName" resultType="java.lang.Integer">
+		select count(*) from product_store where product_store_name = #{productStoreName} or product_store_call = #{productStoreCall}
+	</select>
+	<update id="updateProductStore" parameterType="com.liuliu.com.domain.ProductStore">
+		update product_store SET product_store_bank =#{productStoreBank}, product_store_license = #{productStoreLicense}, area_id = #{areaId}, product_store_adress = #{productStoreAdress}, product_store_examine = 1  where product_store_id = #{productStoreId}
+	</update>
+	<select id="selectFindById" parameterType="int" resultMap="resultProductStore">
+		select * from product_store where product_store_id = #{productStoreId} 
+	</select>
+	<select id="selectProductStoreAll" parameterType="Integer" resultMap="resultProductStore">
+		select * from product_store 
+        <if test="productStoreExamine != null">
+           where product_store_examine = #{productStoreExamine}
+        </if>
+	</select>
+	<update id="updateExamine">
+		update product_store SET product_store_examine = #{productStoreExamine}  where product_store_id = #{productStoreId}
+	</update>
+	<update id="updateProductStorePwd">
+		update product_store SET product_store_pwd = #{productStorePwd}  where product_store_id = #{productStoreId}
+	</update>
+	<resultMap type="com.liuliu.com.domain.ProductStore" id="resultProductStore">
+		<id property="productStoreId" column="product_store_id" javaType="int" />
+		<result property="productStoreName" column="product_store_name" javaType="java.lang.String" />
+		<result property="productStorePwd" column="product_store_pwd" javaType="java.lang.String" />
+		<result property="productStoreBank" column="product_store_bank" javaType="java.lang.String" />
+		<result property="productStoreLicense" column="product_store_license" javaType="java.lang.String" />
+		<result property="areaId" column="area_id" javaType="int" />
+		<result property="productStoreAdress" column="product_store_adress" javaType="java.lang.String" />
+		<result property="productStoreScore" column="product_store_score" javaType="int" />
+		<result property="productStoreExamine" column="product_store_examine" javaType="int" />
+		<result property="productStoreCall" column="product_store_call" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.OrderMapper">
+	<insert id="insertOrder" parameterType="com.liuliu.com.domain.Order">
+		insert into `order` (o_code, o_createdate, o_discount_money, o_money, user_id, usad_id) 
+		values (#{oCode}, #{oCreatedate}, #{oDiscountMoney}, #{oMoney}, #{userId}, #{usadId})
+	</insert>
+	<select id="selectOrderBasisOCode" parameterType="java.lang.String" resultMap="resultOrder">
+		select * from `order` where o_code = #{oCode}
+	</select>
+	<select id="selectUserEmail" parameterType="java.lang.String" resultType="java.lang.String">
+		select user.user_email from `order` 
+		LEFT JOIN `user` ON `order`.user_id = `user`.user_id 
+		WHERE `order`.o_code = #{oCode}
+	</select>
+	<select id="selectOrderitemByUserId" parameterType="int" resultMap="resultOrderVO">
+        select `order`.o_id,`order`.o_createdate,orderitem.*,order_status.os_name,
+		product.pro_id,product.pro_name,pro_property.propr_name,pro_property.propr_promote_price,
+		pro_property.propr_img,express.express_code,express_company.express_company_name
+		from `order`
+		left join orderitem on orderitem.o_code = `order`.o_code
+		left join order_status on order_status.os_id = orderitem.os_id
+		left join pro_property on pro_property.propr_id = orderitem.propr_id
+		left join product on product.pro_id = pro_property.pro_id
+		left join express on express.oi_id = orderitem.oi_id
+		left join express_company on express.express_company_id = express_company.express_company_id
+		where `order`.user_id = #{userId} order by `order`.o_createdate desc
+    </select>
+    
+    <update id="updateOrderOsIdByOiId" parameterType="int">
+        update orderitem
+        set os_id = 4
+        where oi_id = #{oiId}
+    </update>
+    
+    <update id="updateCodeAllOsId" parameterType="java.lang.String">
+        update orderitem
+        set os_id = 5
+        where o_code = #{oCode}
+    </update>
+	<resultMap type="com.liuliu.com.domain.Order" id="resultOrder">
+		<id property="oId" column="o_id" javaType="int" />
+		<result property="oCode" column="o_code" javaType="java.lang.String" />
+		<result property="oCreatedate" column="o_createdate" javaType="java.sql.Timestamp" />
+		<result property="oDiscountMoney" column="o_discount_money" javaType="double" />
+		<result property="oMoney" column="o_money" javaType="double" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="usadId" column="usad_id" javaType="int" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.OrderVO" id="resultOrderVO">
+	    <id property="oId" column="o_id" javaType="int" />
+	    <result property="oCreatedate" column="o_createdate" javaType="java.sql.Timestamp" />	    
+	    <result property="oiId" column="oi_id" javaType="int" />
+	    <result property="proprId" column="propr_id" javaType="int" />
+	    <result property="oCode" column="o_code" javaType="java.lang.String" />
+	    <result property="oiNum" column="oi_num" javaType="int" />
+	    <result property="oiDiscountMoney" column="oi_discount_money" javaType="double" />
+	    <result property="oiMoney" column="oi_money" javaType="double" />
+	    <result property="osId" column="os_id" javaType="int" />
+	    <result property="oiMessage" column="oi_message" javaType="java.lang.String" />
+	    <result property="oiComfirmdate" column="oi_comfirmdate" javaType="java.sql.Timestamp" />
+	    <result property="osName" column="os_name" javaType="java.lang.String" />
+	    <result property="proId" column="pro_id" javaType="int" />
+	    <result property="proName" column="pro_name" javaType="java.lang.String" />
+	    <result property="proprName" column="propr_name" javaType="java.lang.String" />
+	    <result property="proprPromotePrice" column="propr_promote_price" javaType="double" />
+	    <result property="proprImg" column="propr_img" javaType="java.lang.String" />
+	    <result property="expressCode" column="express_code" javaType="java.lang.Long" />
+	    <result property="expressCompanyName" column="express_company_name" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

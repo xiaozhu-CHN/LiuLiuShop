@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.UserMapper">
+	<select id="selectfindByName" parameterType="String" resultMap="resultUser">
+		select * from user where user_name = #{userName}
+	</select>
+	<insert id="insertUser" parameterType="com.liuliu.com.domain.User">
+		insert into user (user_name, user_call, user_img, user_pwd, user_sex, user_phone, auth_id, user_integral)
+		values (#{userName}, #{userCall}, #{userImg}, #{userPwd}, #{userSex}, #{userPhone}, #{authId}, #{userIntegral})
+	</insert>
+	<select id="selectfindByNamePwd" resultMap="resultUser">
+		select * from user where user_name = #{userName} AND  user_pwd = #{userPwd}
+	</select>
+	<update id="updateUserLogo" >
+		update user SET user_img = #{userImg} where user_id = #{userId}
+	</update>
+	<select id="selectFindById" parameterType="int" resultMap="resultUser">
+		select * from user where user_id = #{userId}
+	</select>
+	<update id="updateUser" >
+		update user
+		<set>
+            <if test="userCall != null">
+                user_call = #{userCall},
+            </if>
+            <if test="userSex != null">
+                user_sex = #{userSex},
+            </if>
+        </set>
+		where user_id = #{userId}
+	</update>
+	<update id="updateUserIntegral" >
+		update user SET user_integral = #{userIntegral} where user_id = #{userId}
+	</update>
+	<update id="updateUserEmail" >
+		update user SET user_email = #{userEmail} where user_id = #{userId}
+	</update>
+	<resultMap type="com.liuliu.com.domain.User" id="resultUser">
+		<id property="userId" column="user_id" javaType="int" />
+		<result property="userName" column="user_name" javaType="java.lang.String" />
+		<result property="userCall" column="user_call" javaType="java.lang.String" />
+		<result property="userImg" column="user_img" javaType="java.lang.String" />
+		<result property="userPwd" column="user_pwd" javaType="java.lang.String" />
+		<result property="userSex" column="user_sex" javaType="int" />
+		<result property="userPhone" column="user_phone" javaType="java.lang.Long" />
+		<result property="userIntegral" column="user_integral" javaType="int" />
+		<result property="userAdressinfoDefault" column="user_adressinfo_default" javaType="int" />
+		<result property="authId" column="auth_id" javaType="int" />
+		<result property="userEmail" column="user_email" javaType="java.lang.String" />
+	</resultMap>	
+</mapper>

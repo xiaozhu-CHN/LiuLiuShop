@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ReviewMapper">
+	<select id="selectReviewFindByProId" parameterType="int" resultMap="resultReviewVO">
+		select review.*,user.user_call from review 
+		LEFT JOIN `user` ON review.user_id = `user`.user_id 
+		WHERE pro_id = #{proId} 
+		order by re_date desc
+	</select>
+	<insert id="insertReview" parameterType="com.liuliu.com.domain.Review">
+		insert into review(re_content,pro_id,re_date,re_logistics,re_commodity,re_shop,user_id) values(#{reContent},#{proId},#{reDate},#{reLogistics},#{reCommodity},#{reShop},#{userId})
+	</insert>
+	<resultMap type="com.liuliu.com.domain.Review" id="resultReview">
+		<id property="reId" column="re_id" javaType="int" />
+		<result property="reContent" column="re_content" javaType="java.lang.String" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="reDate" column="re_date" javaType="java.util.Date" />
+		<result property="reLogistics" column="re_logistics" javaType="int" />
+		<result property="reCommodity" column="re_commodity" javaType="int" />
+		<result property="reShop" column="re_shop" javaType="int" />
+	</resultMap>
+	
+	<resultMap type="com.liuliu.com.vo.ReviewVO" id="resultReviewVO">
+		<id property="reId" column="re_id" javaType="int" />
+		<result property="reContent" column="re_content" javaType="java.lang.String" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="userCall" column="user_call" javaType="java.lang.String" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="reDate" column="re_date" javaType="java.util.Date" />
+		<result property="reLogistics" column="re_logistics" javaType="int" />
+		<result property="reCommodity" column="re_commodity" javaType="int" />
+		<result property="reShop" column="re_shop" javaType="int" />
+	</resultMap>
+</mapper>

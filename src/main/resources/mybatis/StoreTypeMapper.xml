@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.StoreTypeMapper">
+	<insert id="insertStoreType" >
+		insert into store_type (product_store_id, proca_id) values (#{productStoreId}, #{procaId})
+	</insert>
+	<select id="selectFinByProductStoreId" parameterType="int" resultMap="resultStoreType">
+		select * from store_type where product_store_id = #{productStoreId}
+	</select>
+	<resultMap type="com.liuliu.com.domain.StoreType" id="resultStoreType">
+		<id property="storeTypeId" column="store_type_id" javaType="int" />
+		<result property="productStoreId" column="product_store_id" javaType="int" />
+		<result property="procaId" column="proca_id" javaType="int" />
+	</resultMap>
+</mapper>

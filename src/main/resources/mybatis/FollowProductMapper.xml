@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.FollowProductMapper">
+	<select id="selectUserFollowProduct" parameterType="int" resultMap="resultFollowProductVO">
+		SELECT follow_product.follow_product_id,follow_product.pro_id,pro_property.propr_original_price,pro_property.propr_promote_price,pro_property.propr_img,product.pro_name FROM follow_product 
+		LEFT JOIN product ON follow_product.pro_id = product.pro_id
+		LEFT JOIN pro_property ON product.pro_id = pro_property.pro_id 
+		WHERE follow_product.user_id = #{userId} 
+		and pro_property.propr_id in (SELECT min(pro_property.propr_id) FROM product LEFT JOIN pro_property ON product.pro_id = pro_property.pro_id group by pro_property.pro_id)
+	</select>
+	<delete id="deleteFollowProduct" parameterType="int" >
+	    delete from follow_product where follow_product_id = #{followProductId}
+	</delete>
+	<select id="countUserFollowProduct" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM follow_product WHERE pro_id = #{proId} AND user_id = #{userId}
+	</select>
+	<insert id="insertUserFollowProduct">
+		insert into follow_product (pro_id, user_id) values (#{proId}, #{userId})
+	</insert>
+    <resultMap type="com.liuliu.com.domain.FollowProduct" id="resultFollowProduct">
+		<id property="followProductId" column="follow_product_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="userId" column="user_id" javaType="int" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.FollowProductVO" id="resultFollowProductVO">
+		<id property="followProductId" column="follow_product_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="proprOriginalPrice" column="propr_original_price" javaType="double" />
+		<result property="proprPromotePrice" column="propr_promote_price" javaType="double" />
+		<result property="proprImg" column="propr_img" javaType="java.lang.String" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

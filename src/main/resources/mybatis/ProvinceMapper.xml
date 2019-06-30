@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProvinceMapper">
+	<select id="selectAllProvince" resultMap="resultProvince">
+		select * from province
+	</select>
+	<insert id="insertProvince" parameterType="String">
+		insert into province (province_name) values (#{provinceName})
+	</insert>
+	<update id="updateProvince" parameterType="com.liuliu.com.domain.Province">
+		update province SET province_name = #{provinceName} where province_id = #{provinceId}
+	</update>
+	<delete id="deleteProvince" parameterType="int" >
+	    delete from province where province_id = #{provinceId}
+	</delete>
+	<select id="selectByProvinceId" resultMap="resultProvince">
+		select * from province where province_id = #{provinceId}
+	</select>
+	<resultMap type="com.liuliu.com.domain.Province" id="resultProvince">
+		<id property="provinceId" column="province_id" javaType="int" />
+		<result property="provinceName" column="province_name" javaType="java.lang.String" />	
+	</resultMap>
+</mapper>

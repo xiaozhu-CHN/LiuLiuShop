@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.OrderitemMapper">
+	<insert id="insertOrderitem" parameterType="com.liuliu.com.domain.Orderitem" >
+		insert into orderitem (propr_id, o_code, oi_num, oi_discount_money, oi_money, os_id, oi_message) 
+		values (#{proprId}, #{oCode}, #{oiNum}, #{oiDiscountMoney}, #{oiMoney}, #{osId}, #{oiMessage} )
+	</insert>
+	<select id="selectFindByOiId" parameterType="String" resultMap="resultOrderitem">
+		select oi_id from orderitem where o_code = #{oCode}
+	</select>
+	<update id="updataOsId" >
+		update orderitem SET os_id = #{osId} where oi_id = #{oiId}
+	</update>
+	<select id="selectProductOrder" resultMap="resultProductOrderVO">
+		SELECT `order`.o_createdate,`user`.user_call, 
+				user_adressinfo.usad_id,user_adressinfo.usad_phone,user_adressinfo.usad_name,user_adressinfo.usad_adress,user_adressinfo.usad_ems,
+				orderitem.oi_id,orderitem.o_code,orderitem.oi_num,orderitem.oi_money,orderitem.oi_message,orderitem.oi_comfirmdate,
+				pro_property.propr_name,product.pro_name,express.express_code,express.express_deliverydate,express_company.express_company_name,
+				province.province_name,city.city_name,area.area_name,order_status.*,alipay_pay.alipay_pay_paydate
+		FROM orderitem 
+		LEFT JOIN `order` ON orderitem.o_code = `order`.o_code
+		LEFT JOIN pro_property ON orderitem.propr_id = pro_property.propr_id
+		LEFT JOIN product ON pro_property.pro_id = product.pro_id
+		LEFT JOIN `user` ON `order`.user_id = `user`.user_id
+		LEFT JOIN user_adressinfo ON `order`.usad_id = user_adressinfo.usad_id
+		LEFT JOIN area ON user_adressinfo.area_id = area.area_id
+		LEFT JOIN city ON area.city_id = city.city_id
+		LEFT JOIN province ON city.province_id = province.province_id
+		LEFT JOIN express ON orderitem.oi_id = express.oi_id
+		LEFT JOIN express_company ON express.express_company_id = express_company.express_company_id
+		LEFT JOIN order_status ON orderitem.os_id = order_status.os_id
+		LEFT JOIN alipay_pay ON orderitem.o_code = alipay_pay.out_trade_no
+		WHERE product.product_store_id = #{productStoreId}
+		<if test="osId != null">
+        	 and order_status.os_id = #{osId}  
+        </if>
+	</select>
+	<select id="selectOrderitem" parameterType="String" resultMap="resultOrderitem">
+		select * from orderitem where o_code = #{oCode}
+	</select>
+	<resultMap type="com.liuliu.com.domain.Orderitem" id="resultOrderitem">
+		<id property="oiId" column="oi_id" javaType="int" />
+		<result property="proprId" column="propr_id" javaType="int" />
+		<result property="oCode" column="o_code" javaType="java.lang.String" />
+		<result property="oiNum" column="oi_num" javaType="int" />
+		<result property="oiDiscountMoney" column="oi_discount_money" javaType="double" />
+		<result property="oiMoney" column="oi_money" javaType="double" />
+		<result property="osId" column="os_id" javaType="int" />
+		<result property="oiMessage" column="oi_message" javaType="java.lang.String" />
+		<result property="oiComfirmdate" column="oi_comfirmdate" javaType="java.sql.Timestamp" />
+	</resultMap>
+	
+	<resultMap type="com.liuliu.com.vo.ProductOrderVO" id="resultProductOrderVO">
+		<id property="oiId" column="oi_id" javaType="int" />
+		<result property="oCreatedate" column="o_createdate" javaType="java.sql.Timestamp" />
+		<result property="userCall" column="user_call" javaType="java.lang.String" />
+		<result property="usadId" column="usad_id" javaType="int" />
+		<result property="usadPhone" column="usad_phone" javaType="java.lang.Long" />
+		<result property="usadName" column="usad_name" javaType="java.lang.String" />
+		<result property="usadAdress" column="usad_adress" javaType="java.lang.String" />
+		<result property="usadEms" column="usad_ems" javaType="int" />
+		<result property="oCode" column="o_code" javaType="java.lang.String" />
+		<result property="oiNum" column="oi_num" javaType="int" />
+		<result property="oiMoney" column="oi_money" javaType="double" />
+		<result property="oiMessage" column="oi_message" javaType="java.lang.String" />
+		<result property="oiComfirmdate" column="oi_comfirmdate" javaType="java.sql.Timestamp" />
+		<result property="proprName" column="propr_name" javaType="java.lang.String" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+		<result property="expressCompanyName" column="express_company_name" javaType="java.lang.String" />
+		<result property="expressCode" column="express_code" javaType="java.lang.String" />
+		<result property="expressDeliverydate" column="express_deliverydate" javaType="java.sql.Timestamp" />
+		<result property="provinceName" column="province_name" javaType="java.lang.String" />
+		<result property="cityName" column="city_name" javaType="java.lang.String" />
+		<result property="areaName" column="area_name" javaType="java.lang.String" />
+		<result property="osId" column="os_id" javaType="int" />
+		<result property="osName" column="os_name" javaType="java.lang.String" />
+		<result property="alipayPayPaydate" column="alipay_pay_paydate" javaType="java.sql.Timestamp" />
+	</resultMap>
+</mapper>

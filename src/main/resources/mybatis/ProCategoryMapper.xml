@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProCategoryMapper">
+
+	<select id="selectAllProCategory" resultMap="resultProCategory">
+		select * from pro_category
+	</select>
+	
+	<insert id="insertProCategory" parameterType="String">
+		insert into pro_category(proca_name) values(#{procaName})
+	</insert>
+	
+	<delete id="deleteProCategory" parameterType="com.liuliu.com.domain.ProCategory">
+		delete from pro_category where proca_id = #{procaId}
+	</delete>
+	
+	<update id="updateProCategory" parameterType="com.liuliu.com.domain.ProCategory">
+		update pro_category SET proca_name = #{procaName} where proca_id = #{procaId}
+	</update>
+	
+	<select id="selectProcaName" resultMap="resultProCategory">
+		select * from pro_category where proca_id = #{procaId}
+	</select>
+	
+	<resultMap type="com.liuliu.com.domain.ProCategory" id="resultProCategory">
+		<id property="procaId" column="proca_id" javaType="int" />
+		<result property="procaName" column="proca_name" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

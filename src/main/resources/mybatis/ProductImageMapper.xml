@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ProductImageMapper">
+	<select id="selectFindByProId" parameterType="int" resultMap="resultProductImage">
+		select * from product_image where pro_id = #{proId}
+	</select>
+	<insert id="insertProductImage" parameterType="com.liuliu.com.domain.ProductImage">
+		insert into product_image (pro_id, proimg_link_one, proimg_link_two, proimg_link_three) values (#{proId}, #{proimgLinkOne}, #{proimgLinkTwo}, #{proimgLinkThree})
+	</insert>
+	<delete id="deleteProductImage" parameterType="int" >
+	    delete from product_image where proimg_id = #{proimgId}
+	</delete>
+	<resultMap type="com.liuliu.com.domain.ProductImage" id="resultProductImage">
+		<id property="proimgId" column="proimg_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="proimgLinkOne" column="proimg_link_one" javaType="java.lang.String" />
+		<result property="proimgLinkTwo" column="proimg_link_two" javaType="java.lang.String" />
+		<result property="proimgLinkThree" column="proimg_link_three" javaType="java.lang.String" />
+	</resultMap>
+</mapper>

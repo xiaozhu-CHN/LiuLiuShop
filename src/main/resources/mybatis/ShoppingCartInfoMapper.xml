@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.ShoppingCartInfoMapper">
+	<insert id="insertShoppingCartInfo" parameterType="com.liuliu.com.domain.ShoppingCartInfo">
+		insert into shopping_cart_info (user_id, propr_id, sh_num) values (#{userId}, #{proprId}, #{shNum})
+	</insert>
+	<select id="selectShoppingCartInfo" resultMap="resultShoppingCartInfo">
+		select * from shopping_cart_info where user_id = #{userId} AND propr_id = #{proprId}
+	</select>
+	<update id="updateShoppingCartInfo">
+		update shopping_cart_info SET sh_num = #{shNum} where sh_id = #{shId}
+	</update>
+	<select id="selectUserShoppingCartInfo" resultMap="resultCartPropertyProductVO">
+		SELECT shopping_cart_info.*,pro_property.pro_id,pro_property.propr_name,pro_property.propr_original_price,pro_property.propr_promote_price,pro_property.propr_img,product.pro_name,product.product_store_id,product_store.product_store_call from 
+		shopping_cart_info LEFT JOIN pro_property on shopping_cart_info.propr_id = pro_property.propr_id
+		LEFT JOIN product on pro_property.pro_id = product.pro_id
+		LEFT JOIN product_store on product.product_store_id = product_store.product_store_id
+		WHERE user_id = #{userId}
+	</select>
+	<delete id="deleteUserShoppingCartInfo" >
+	    delete from shopping_cart_info where user_id = #{userId} AND sh_id = #{shId}
+	</delete>
+	<select id="countShoppingCartProprNumber" parameterType="int" resultType="java.lang.Integer">
+		select count(*) from shopping_cart_info where user_id = #{userId}
+	</select>
+	<select id="selectShoppingCartSettlement" parameterType="java.util.List" resultMap="resultCartPropertyProductVO">
+		SELECT shopping_cart_info.*,pro_property.pro_id,pro_property.propr_name,pro_property.propr_original_price,pro_property.propr_promote_price,pro_property.propr_img,product.pro_name,product.product_store_id,product_store.product_store_call from 
+		shopping_cart_info LEFT JOIN pro_property on shopping_cart_info.propr_id = pro_property.propr_id
+		LEFT JOIN product on pro_property.pro_id = product.pro_id
+		LEFT JOIN product_store on product.product_store_id = product_store.product_store_id
+		WHERE sh_id in
+		<foreach collection="list" item="shId" separator="," open="(" close=")" index="index">
+       		#{shId}
+    	</foreach>
+	</select>
+	<delete id="deleteShoppingCartInfoList" parameterType="java.util.List" >
+	    delete from shopping_cart_info where sh_id in
+	    <foreach collection="list" item="shId" separator="," open="(" close=")" index="index">
+       		#{shId}
+    	</foreach>
+	</delete>
+	<select id="selectMinProprCancelTime" parameterType="java.util.List" resultType="java.lang.Integer">
+		select min(pro_property.propr_cancel_time) from shopping_cart_info LEFT JOIN pro_property  on shopping_cart_info.propr_id = pro_property.propr_id 
+		WHERE  sh_id IN
+		<foreach collection="list" item="shId" separator="," open="(" close=")" index="index">
+       		#{shId}
+    	</foreach>
+	</select>
+	<resultMap type="com.liuliu.com.domain.ShoppingCartInfo" id="resultShoppingCartInfo">
+		<id property="shId" column="sh_id" javaType="int" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="proprId" column="propr_id" javaType="int" />
+		<result property="shNum" column="sh_num" javaType="int" />
+	</resultMap>
+	<resultMap type="com.liuliu.com.vo.CartPropertyProductVO" id="resultCartPropertyProductVO">
+		<id property="shId" column="sh_id" javaType="int" />
+		<result property="userId" column="user_id" javaType="int" />
+		<result property="proprId" column="propr_id" javaType="int" />
+		<result property="proId" column="pro_id" javaType="int" />
+		<result property="shNum" column="sh_num" javaType="int" />
+		<result property="proprName" column="propr_name" javaType="java.lang.String" />
+		<result property="proprOriginalPrice" column="propr_original_price" javaType="double" />
+		<result property="proprPromotePrice" column="propr_promote_price" javaType="double" />
+		<result property="proprImg" column="propr_img" javaType="java.lang.String" />
+		<result property="proName" column="pro_name" javaType="java.lang.String" />
+		<result property="productStoreId" column="product_store_id" javaType="int" />
+		<result property="productStoreCall" column="product_store_call" javaType="java.lang.String" />
+	</resultMap>
+	
+</mapper>

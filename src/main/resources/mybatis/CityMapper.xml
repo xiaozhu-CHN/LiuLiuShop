@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuliu.com.mapper.CityMapper">
+	<select id="selectCityByProvinceId" parameterType="int" resultMap="resultCity">
+		select * from city where province_id = #{provinceId}
+	</select>
+	<insert id="insertCity" >
+		insert into city (city_name, province_id) values (#{cityName}, #{provinceId})
+	</insert>
+	<delete id="deleteCity" parameterType="int" >
+	    delete from city where city_id = #{cityId}
+	</delete>
+	<update id="updateCity" parameterType="com.liuliu.com.domain.City">
+		update city SET city_name = #{cityName} where city_id = #{cityId}
+	</update>
+	<select id="selectCityByCityId" parameterType="int" resultMap="resultCity">
+		select * from city where city_id = #{cityId}
+	</select>
+	<resultMap type="com.liuliu.com.domain.City" id="resultCity">
+		<id property="cityId" column="city_id" javaType="int" />
+		<result property="cityName" column="city_name" javaType="java.lang.String" />
+		<result property="provinceId" column="province_id" javaType="int" />
+	</resultMap>
+</mapper>
